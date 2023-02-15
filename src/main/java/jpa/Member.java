@@ -14,8 +14,8 @@ public class Member {
     private long id;
     private String username;
     private int age;
-    @ManyToOne
-    @JoinColumn(name = "TEAM_ID")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "TEAM_ID", foreignKey = @ForeignKey(value = ConstraintMode.NO_CONSTRAINT))
     private Team team;
     @OneToMany(mappedBy = "member")
     private List<Order> orders;
