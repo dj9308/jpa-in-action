@@ -4,7 +4,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
-import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
@@ -43,16 +42,15 @@ public class Main {
             member4.setUsername("회원4");
             em.persist(member4);
 
-            em.flush();
+            //FLUSH 자동 호출 (auto 모드일 때)
+            //FLUSH를 한다고 해서 영속성 컨텍스트는 초기화 되지 않는다.
+            int resultCount = em.createQuery("update Member m set m.age = 20")
+                            .executeUpdate();
+            System.out.println("resultCount = "+ resultCount);
             em.clear();
 
-            List<Member> resultList = em.createNamedQuery("Member.findByUsername", Member.class)
-                    .setParameter("username", "회원1")
-                    .getResultList();
-
-            for(Member member : resultList){
-                System.out.println("member = "+ member);
-            }
+            Member test = em.find(Member.class, member1.getAge());
+            System.out.println("member1 age = "+ test.getAge());
             tx.commit();
         }catch (Exception e){
             tx.rollback();
