@@ -46,12 +46,14 @@ public class Main {
             em.flush();
             em.clear();
 
-            String query = "select m FROM Member m join fetch m.team";
-            List<Member> result = em.createQuery(query, Member.class)
+            List<Member> resultList = em.createNamedQuery("Member.findByUsername", Member.class)
+                    .setParameter("username", "회원1")
                     .getResultList();
-            for(Member member : result){
-                System.out.println("member = "+member.getUsername()+", "+ member.getTeam().getName());
+
+            for(Member member : resultList){
+                System.out.println("member = "+ member);
             }
+            tx.commit();
         }catch (Exception e){
             tx.rollback();
             e.printStackTrace();
